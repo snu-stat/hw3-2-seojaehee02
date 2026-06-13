@@ -2317,7 +2317,7 @@ ls Dockerfile
 
 ### 답안
 
-`.github/workflows/publish.yml`을 수정하여 Quarto 렌더링과 GitHub Pages 배포 이후 Docker 이미지를 GitHub Container Registry(GHCR)에 푸시하도록 설정하였다. GHCR에 패키지를 올려야 하므로 job 권한에 `packages: write`를 추가하였다. 또한 현재 작업 파일이 `datascience/hw03.qmd`에 있으므로 Actions 안에서 이를 루트의 `hw03.qmd`로 복사한 뒤 렌더링하도록 `Prepare HW03 source` 단계를 추가하였다. 이렇게 하면 `_site/hw03.html`과 `_site/hw03.ipynb`가 생성되고, 3-1에서 작성한 `Dockerfile`이 `_site/hw03.ipynb`를 컨테이너 안으로 복사할 수 있다.
+`.github/workflows/publish.yml`을 수정하여 Quarto 렌더링과 GitHub Pages 배포 이후 Docker 이미지를 GitHub Container Registry(GHCR)에 푸시하도록 설정하였다. GHCR에 패키지를 올려야 하므로 job 권한에 `packages: write`를 추가하였다. 저장소 루트의 `hw03.qmd`를 `_quarto.yml`이 렌더링하도록 설정했기 때문에, Actions에서 `quarto render`를 실행하면 `_site/hw03.html`과 `_site/hw03.ipynb`가 생성된다. 이후 3-1에서 작성한 `Dockerfile`이 `_site/hw03.ipynb`를 컨테이너 안으로 복사한다.
 
 추가한 Docker 관련 단계는 다음과 같다.
 

@@ -1,0 +1,11 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.md
+    - hw03.qmd
+
+format:
+  html:
+    embed-resources: true
+  ipynb: default
