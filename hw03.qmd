@@ -2287,7 +2287,7 @@ EXPOSE 8888
 
 ### 답안
 
-저장소 최상위 디렉토리에 `Dockerfile`을 만들었다. 기본 구조는 제시된 예시와 같고, `hw03.qmd` 실행에 필요한 추가 패키지를 함께 설치하도록 설정하였다. R에서는 `NHANES`, `Lahman`을 추가했고, Python에서는 `scipy`, `statsmodels`, `pylahman`을 추가하였다. 생성된 컨테이너는 `_site/hw03.ipynb`를 Binder 사용자 홈 디렉토리의 `hw03.ipynb`로 복사하도록 설정되어 있다.
+저장소 최상위 디렉토리에 `Dockerfile`을 만들었다. 기본 구조는 제시된 예시와 같고, `hw03.qmd` 실행에 필요한 추가 패키지를 함께 설치하도록 설정하였다. R에서는 `NHANES`, `Lahman`을 추가했고, Python에서는 `scipy`, `statsmodels`, `pylahman`을 추가하였다. 생성된 컨테이너는 Actions에서 준비한 `hw03.ipynb`를 Binder 사용자 홈 디렉토리의 `hw03.ipynb`로 복사하도록 설정되어 있다.
 
 ```{bash eval=FALSE}
 ls Dockerfile
@@ -2317,7 +2317,7 @@ ls Dockerfile
 
 ### 답안
 
-`.github/workflows/publish.yml`을 수정하여 Quarto 렌더링과 GitHub Pages 배포 이후 Docker 이미지를 GitHub Container Registry(GHCR)에 푸시하도록 설정하였다. GHCR에 패키지를 올려야 하므로 job 권한에 `packages: write`를 추가하였다. 저장소 루트의 `hw03.qmd`를 `_quarto.yml`이 렌더링하도록 설정했기 때문에, Actions에서 `quarto render`를 실행하면 `_site/hw03.html`과 `_site/hw03.ipynb`가 생성된다. 이후 3-1에서 작성한 `Dockerfile`이 `_site/hw03.ipynb`를 컨테이너 안으로 복사한다.
+`.github/workflows/publish.yml`을 수정하여 Quarto 렌더링과 GitHub Pages 배포 이후 Docker 이미지를 GitHub Container Registry(GHCR)에 푸시하도록 설정하였다. GHCR에 패키지를 올려야 하므로 job 권한에 `packages: write`를 추가하였다. 저장소 루트의 `hw03.qmd`를 `_quarto.yml`이 렌더링하도록 설정했기 때문에, Actions에서 `quarto render`를 실행하면 `_site/hw03.html`과 `_site/hw03.ipynb`가 생성된다. 이후 Binder와 Docker 빌드가 같은 노트북 파일을 찾을 수 있도록 `_site/hw03.ipynb`를 루트의 `hw03.ipynb`로 복사하고, Binder가 `gh-pages` 브랜치에서 실행 환경을 찾을 수 있도록 `Dockerfile`도 `_site`에 함께 복사한다.
 
 추가한 Docker 관련 단계는 다음과 같다.
 
