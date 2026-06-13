@@ -10,17 +10,18 @@ RUN apt-get update && apt-get install -y \
     libmagick++-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Miniconda 설치
+# 3. Miniforge 설치
 ENV CONDA_DIR /opt/conda
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
-    rm ~/miniconda.sh
+RUN wget --quiet https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O /tmp/miniforge.sh && \
+    /bin/bash /tmp/miniforge.sh -b -p /opt/conda && \
+    rm /tmp/miniforge.sh
 
 # 4. Conda 경로 설정 및 환경 생성
 ENV PATH=$CONDA_DIR/bin:$PATH
-RUN conda create -n r-reticulate python=3.10 -y && \
-    conda install -n r-reticulate -c conda-forge numpy pandas matplotlib scipy statsmodels -y && \
-    /opt/conda/envs/r-reticulate/bin/pip install pylahman && \
+RUN conda config --set channel_priority strict && \
+    conda create -y -n r-reticulate -c conda-forge --override-channels \
+      python=3.10 pip numpy pandas matplotlib scipy statsmodels libexpat && \
+    conda run -n r-reticulate pip install --no-cache-dir pylahman && \
     conda clean -afy
 # 추가로 필요한 패키지 설치
 
