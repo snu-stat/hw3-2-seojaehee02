@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     git \
     imagemagick \
     libmagick++-dev \
+    libzmq3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. Miniforge 설치
@@ -20,10 +21,13 @@ RUN wget --quiet https://github.com/conda-forge/miniforge/releases/latest/downlo
 ENV PATH=$CONDA_DIR/bin:$PATH
 RUN conda config --set channel_priority strict && \
     conda create -y -n r-reticulate -c conda-forge --override-channels \
-      python=3.10 pip numpy pandas matplotlib scipy statsmodels libexpat && \
+      python=3.10 pip jupyter numpy pandas matplotlib scipy statsmodels libexpat && \
     conda run -n r-reticulate pip install --no-cache-dir pylahman && \
     conda clean -afy
 # 추가로 필요한 패키지 설치
+
+# Binder와 IRkernel 등록에서 conda 환경의 jupyter를 사용한다.
+ENV PATH=$CONDA_DIR/envs/r-reticulate/bin:$CONDA_DIR/bin:$PATH
 
 # 5. R 패키지 설치 (reticulate 및 필수 패키지)
 RUN R -e "install.packages(c('reticulate', 'remotes', 'IRkernel', 'NHANES', 'Lahman'), repos = 'https://cloud.r-project.org')" && \
